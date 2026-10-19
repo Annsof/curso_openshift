@@ -1,0 +1,73 @@
+# =========================================================================
+# API de capybaras: ConfigMap + Secret + Deployment + Service (ClusterIP)
+# La API NO se expone con una Route: solo se accede dentro del cluster.
+# =========================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: capybara-api-config
+data:
+  APP_MENSAJE: "¡Hola capybaras desde OpenShift! 🦫"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: capybara-api-secret
+type: Opaque
+stringData:
+  API_SECRETO: "token-super-secreto-de-capybaras"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capybara-api
+  labels:
+    app: capybara-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: capybara-api
+  template:
+    metadata:
+      labels:
+        app: capybara-api
+    spec:
+      containers:
+        - name: capybara-api
+          # Imagen que construye S2I. Sustituye TU-PROYECTO por el nombre
+          # de tu proyecto (lo ves con: oc project -q).
+          image: image-registry.openshift-image-registry.svc:5000/TU-PROYECTO/capybara-api:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: capybara-api-config
+            - secretRef:
+                name: capybara-api-secret
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: capybara-api
+  labels:
+    app: capybara-api
+spec:
+  selector:
+    app: capybara-api
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: ClusterIP

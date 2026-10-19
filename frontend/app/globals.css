@@ -1,0 +1,160 @@
+:root {
+  --marron: #8a5a2b;
+  --marron-claro: #c9a06a;
+  --crema: #f6efe4;
+  --verde: #6f8f4f;
+  --texto: #3a2c1a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--crema);
+  color: var(--texto);
+  line-height: 1.5;
+}
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+.hero {
+  text-align: center;
+  padding: 32px 16px;
+  background: linear-gradient(160deg, var(--marron-claro), var(--marron));
+  color: #fff;
+  border-radius: 20px;
+  margin-bottom: 24px;
+}
+
+.hero .foto {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.hero h1 {
+  margin: 8px 0 4px;
+  font-size: 2rem;
+}
+
+.hero p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.pods {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.pod {
+  background: #fff;
+  border: 1px solid #e7dcc8;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pod .label {
+  font-size: 0.8rem;
+  color: var(--marron);
+  font-weight: 600;
+}
+
+.pod code {
+  font-size: 0.8rem;
+  word-break: break-all;
+  background: var(--crema);
+  padding: 4px 6px;
+  border-radius: 8px;
+}
+
+.mensaje {
+  background: var(--verde);
+  color: #fff;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.secreto {
+  text-align: center;
+  margin: 0 0 24px;
+}
+
+h2 {
+  color: var(--marron);
+}
+
+.cards {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e7dcc8;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.card .num {
+  flex: 0 0 28px;
+  height: 28px;
+  width: 28px;
+  background: var(--marron);
+  color: #fff;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.error {
+  background: #fbebeb;
+  border: 1px solid #e3b7b7;
+  color: #8a2b2b;
+  padding: 16px;
+  border-radius: 14px;
+  margin-bottom: 24px;
+}
+
+.error p {
+  margin: 6px 0 0;
+}
+
+footer {
+  margin-top: 32px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--marron);
+}
+
+@media (max-width: 480px) {
+  .pods {
+    grid-template-columns: 1fr;
+  }
+}

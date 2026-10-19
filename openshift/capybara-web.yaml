@@ -1,0 +1,76 @@
+# =========================================================================
+# Frontend de capybaras: ConfigMap + Deployment + Service + Route
+# El frontend SÍ se expone con una Route (es el punto de entrada).
+# Habla con la API por el nombre del Service interno: http://capybara-api:8080
+# =========================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: capybara-web-config
+data:
+  API_URL: "http://capybara-api:8080"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capybara-web
+  labels:
+    app: capybara-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: capybara-web
+  template:
+    metadata:
+      labels:
+        app: capybara-web
+    spec:
+      containers:
+        - name: capybara-web
+          # Sustituye TU-PROYECTO por el nombre de tu proyecto (oc project -q).
+          image: image-registry.openshift-image-registry.svc:5000/TU-PROYECTO/capybara-web:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: capybara-web-config
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/ready
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: capybara-web
+  labels:
+    app: capybara-web
+spec:
+  selector:
+    app: capybara-web
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: capybara-web
+  labels:
+    app: capybara-web
+spec:
+  to:
+    kind: Service
+    name: capybara-web
+  port:
+    targetPort: 8080
